@@ -1,22 +1,36 @@
-from models import Driver, Car, Track
-from simulation import simulate_qualifying
+from data_fetch import fetch_qualifying, fetch_race
+from prediction import simulate_2026_quali
 
-drivers = [
-    Driver("Verstappen", 96, 98, 92, 95, 97, 85),
-    Driver("Leclerc", 94, 93, 88, 90, 89, 87),
-    Driver("Norris", 92, 91, 87, 88, 90, 80),
-]
+df_quali_24 = fetch_qualifying(2024)
+df_quali_25 = fetch_qualifying(2025)
 
-cars = [
-    Car("Red Bull", 97, 95, 93, 92),
-    Car("Ferrari", 94, 92, 91, 88),
-    Car("McLaren", 93, 90, 92, 90),
-]
+df_race_24 = fetch_race(2024)
+df_race_25 = fetch_race(2025)
 
-bahrain = Track("Bahrain", 90.0, 95.0, 1.4, 0.7, 0.35)
+print(df_quali_25["circuit"].unique())
 
-grid = simulate_qualifying(drivers, cars, bahrain)
+track = input("Enter track name: ")
 
-print("=== Predicted Qualifying ===")
-for pos, entry in enumerate(grid, start=1):
-    print(f"P{pos}: {entry['driver']} - {entry['lap_time']}s")
+results = simulate_2026_quali(
+    df_quali_24,
+    df_quali_25,
+    df_race_24,
+    df_race_25,
+    track,
+    simulations=4000
+)
+results = results.rename(columns={
+    "pole_probability_%": "pole_probability"
+})
+
+
+print("\n ---QUALI PREDICTIONS--- \n")
+
+for pos, row in enumerate(results.itertuples(), start=1):
+    print(
+        f"P{pos:>2} | "
+        f"{row.driver:<22} "
+        f"{row.team:<12} | "
+        f"Pole: {row.pole_probability:>6.2f}% | "
+        f"Avg Grid: {row.avg_quali_position:>4.2f}"
+    )
