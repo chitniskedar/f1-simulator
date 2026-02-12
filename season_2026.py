@@ -2,8 +2,8 @@ driver_team_2026 = {
     "Lando Norris": "McLaren",
     "Oscar Piastri": "McLaren",
 
-    "Charles Leclerc": "Ferrari",
-    "Lewis Hamilton": "Ferrari",
+    "Charles Leclerc": "Ferrari xD",
+    "Lewis Hamilton": "Ferrari xD",
 
     "Max Verstappen": "Red Bull",
     "Isack Hadjar": "Red Bull",
